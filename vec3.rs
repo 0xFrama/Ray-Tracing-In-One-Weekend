@@ -1,19 +1,9 @@
-
-use std::ops::Neg;
-use std::fmt;
-use std::ops::Add;
-use std::ops::Sub;
-use std::ops::Mul;
-use std::ops::Div;
-use std::ops::Index;
-use std::ops::MulAssign;
-use std::ops::AddAssign;
+use std::ops::{Add, Sub, Mul, Div, AddAssign, MulAssign, Neg, Index, IndexMut};
 
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub struct Vec3 {
     e: [f64; 3]
 }
-
 
 impl Neg for Vec3 {
     type Output = Vec3;
@@ -33,13 +23,13 @@ impl Index<usize> for Vec3 {
     }
 }
 
-impl std::ops::IndexMut<usize> for Vec3 {
+impl IndexMut<usize> for Vec3 {
     fn index_mut(&mut self, i: usize) -> &mut f64 {
         &mut self.e[i]
     }
 }
 
-impl std::ops::AddAssign for Vec3 {
+impl AddAssign for Vec3 {
     fn add_assign(&mut self, other: Vec3) {
         self.e[0] += other.e[0];
         self.e[1] += other.e[1];
@@ -47,18 +37,11 @@ impl std::ops::AddAssign for Vec3 {
     }
 }
 
-impl std::ops::MulAssign<f64> for Vec3 {
+impl MulAssign<f64> for Vec3 {
     fn mul_assign(&mut self, other: f64) {
         self.e[0] *= other;
         self.e[1] *= other;
         self.e[2] *= other;
-    }
-}
-
-
-impl fmt::Display for Vec3 {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{} {} {}", self.e[0], self.e[1], self.e[2])
     }
 }
 
@@ -120,15 +103,15 @@ impl Div<f64> for Vec3 {
 
 impl Vec3 {
     fn new() -> Vec3 {
-        Vec3 { e: [0.0,0.0,0.0] }
+        Vec3 { e: [0., 0., 0.] }
     }
 
     pub fn new_with_inputs(x: f64, y: f64, z: f64) -> Vec3 {
         Vec3 { e: [x, y, z] }
     }
 
-    fn from_values(e0: f64, e1: f64, e2: f64) -> Vec3 {
-        Vec3 { e: [e0, e1, e2]}
+    pub fn show(self) {
+        println!("[ {}, {}, {} ]", self.e[0], self.e[1], self.e[2]);
     }
 
     pub fn x(&self) -> f64 {
@@ -168,6 +151,3 @@ fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
 fn unit_vector(v: Vec3) -> Vec3 {
     return v / v.length();
 }
-
-pub type Point3 = Vec3;
-pub type Color = Vec3;
