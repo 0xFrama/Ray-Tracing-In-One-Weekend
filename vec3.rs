@@ -102,7 +102,7 @@ impl Div<f64> for Vec3 {
 
 
 impl Vec3 {
-    fn new() -> Vec3 {
+    pub fn new() -> Vec3 {
         Vec3 { e: [0., 0., 0.] }
     }
 
@@ -126,11 +126,11 @@ impl Vec3 {
         return self.e[2];
     }
 
-    fn length(&self) -> f64 {
+    pub fn length(&self) -> f64 {
         return self.length_squared().sqrt()
     }
 
-    fn length_squared(&self) -> f64 {
+    pub fn length_squared(&self) -> f64 {
         return self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2] 
     }
 }
