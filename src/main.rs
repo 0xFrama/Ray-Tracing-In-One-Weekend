@@ -1,22 +1,59 @@
 mod color;
 mod vec3;
+mod ray;
+
+use color::Color;
+use ray::Ray;
+use vec3::{Vec3, Point3};
+
+fn ray_color(r: &Ray) -> Color { 
+    let unit_direction = Vec3::unit_vector(r.direction());
+    let a = 0.5 * (unit_direction.y() + 1.);
+    return Color::new_with_inputs(1., 1., 1.) * (1.-a) + Color::new_with_inputs(0.5, 0.7, 1.) * a;
+}
 
 fn main() {
 
     // Image
 
-    const IMAGE_WIDTH: u32 = 256;
-    const IMAGE_HEIGHT: u32 = 256;
+    let aspect_ratio: f32 = 16.0 / 9.0;
+    let image_width: u32 = 400;
+    let mut image_height: u32 = ((image_width as f32) / aspect_ratio) as u32;
+    image_height = if image_height < 1 { 1 } else { image_height };
+
+    // Camera
+    
+    let focal_length: f32 = 1.0;
+    let viewport_height: f32 = 2.0;
+    let viewport_width= viewport_height * (image_width/image_height) as f32;
+    let camera_center = Point3::new_with_inputs(0.,0.,0.);
+    
+    // Calculate the vectors across the horizontal and down the vertical view port edges.
+    let viewport_u = Vec3::new_with_inputs(viewport_width, 0., 0.);
+    let viewport_v = Vec3::new_with_inputs(0., -viewport_height, 0.);
+
+    // Calculate the horizontal and vertical delta vectos from pixels to pixel.
+    let pixel_delta_u = viewport_u / (image_width as f32);
+    let pixel_delta_v = viewport_v / (image_height as f32);
+
+    // Calculate the location of the upper left pixel.
+    let viewport_upper_left = camera_center - Vec3::new_with_inputs(0., 0., focal_length) - viewport_u/2. - viewport_v/2.;
+    let pixel00_loc = viewport_upper_left + (pixel_delta_u + pixel_delta_v) * 0.5;
+
 
     // Render
 
-    println!("P3\n{} {}\n255", IMAGE_WIDTH, IMAGE_HEIGHT);
+    println!("P3\n{} {}\n255", image_width, image_height);
  
-    for j in 0..IMAGE_HEIGHT {
-        eprintln!("Scanlines remaining: {} ", (IMAGE_HEIGHT-j));
-        for i in 0..IMAGE_WIDTH {
-            let pixel_color = vec3::Vec3::new_with_inputs((i as f32/(IMAGE_WIDTH-1) as f32), (j as f32/(IMAGE_HEIGHT-1) as f32), 0.);
-            color::write_color(pixel_color);
+    for j in 0..image_height {
+        eprintln!("Scanlines remaining: {} ", (image_height-j));
+        for i in 0..image_width {
+            let pixel_center = pixel00_loc + (pixel_delta_u * (i as f32)) + (pixel_delta_v * (j as f32));
+            let ray_direction = pixel_center - camera_center;
+            let r = Ray::ray(camera_center, ray_direction);
+            //let pixel_color = Color::new_with_inputs((i as f32/(image_width-1) as f32), (j as f32/(image_height-1) as f32), 0.);
+            let pixel_color = ray_color(&r);
+            Color::write_color(pixel_color);
         }
     }
 }

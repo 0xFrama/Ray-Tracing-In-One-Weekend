@@ -1,5 +1,6 @@
 use crate::vec3::{Point3, Vec3};
 
+#[derive(Copy, Clone)]
 pub struct Ray {
     dir: Vec3,
     orig: Point3,
@@ -19,7 +20,7 @@ impl Ray {
     }
 
     pub fn at(self, t: f32) -> Point3 {
-        return self.orig + t*self.dir;
+        return self.orig + self.dir*t;
     }
 
 }
