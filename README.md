@@ -9,10 +9,9 @@ This is what has been implemented so far:
 - [X] 2. Output an Image
 - [X] 3. The vec3 Class
 - [X] 4. Rays, a Simple Camera, and Background
-- [ ] 5. Adding a Sphere
-    - [X] Ray-Sphere Intesection 
-    - [ ] 5.2 Creating Our First Raytraced Image :construction: *In Progress..*
+- [X] 5. Adding a Sphere
 - [ ] 6. Surface Normals and Multiple Objects
+    - [ ] Shading with Surface Normals :construction: *In Progress..*
 - [ ] 7. Moving Camera Code Into Its Own Class
 - [ ] 8. Antialiasing
 - [ ] 9. Diffuse Materials
