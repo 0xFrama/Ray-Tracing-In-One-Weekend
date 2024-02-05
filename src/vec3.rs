@@ -100,7 +100,6 @@ impl Div<f32> for Vec3 {
     }
 }
 
-
 impl Vec3 {
     pub fn new() -> Vec3 {
         Vec3 { e: [0., 0., 0.] }
@@ -132,12 +131,7 @@ impl Vec3 {
 
     pub fn length_squared(&self) -> f32 {
         return self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2] 
-    }
-
-    pub fn dot(u: &Vec3, v: &Vec3) -> f32 {
-        return u.x() * v.x() + u.y() * v.y() + u.z() * v.z()
-    }
-    
+    }  
     
     pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
         return Vec3::new_with_inputs(  u.y() * v.z() - u.z() * v.y(),
@@ -152,3 +146,7 @@ impl Vec3 {
 }
 
 pub type Point3 = Vec3;
+
+pub fn dot(u: &Vec3, v: &Vec3) -> f32 {
+    return u.x() * v.x() + u.y() * v.y() + u.z() * v.z()
+}

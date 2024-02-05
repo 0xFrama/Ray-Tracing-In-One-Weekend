@@ -5,11 +5,21 @@ The [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingIn
 I've created this repo with the same working code but in **Rust**.
 
 This is what has been implemented so far:
-- [X] Overview
-- [X] Output an Image
-- [X] The vec3 Class
-- [X] Rays, a Simple Camera, and Background
-- [ ] Adding a Sphere
-    - [ ] Ray-Sphere Intesection :construction: *In Progress..* :construction:
+- [X] 1. Overview
+- [X] 2. Output an Image
+- [X] 3. The vec3 Class
+- [X] 4. Rays, a Simple Camera, and Background
+- [ ] 5. Adding a Sphere
+    - [X] Ray-Sphere Intesection 
+    - [ ] 5.2 Creating Our First Raytraced Image :construction: *In Progress..*
+- [ ] 6. Surface Normals and Multiple Objects
+- [ ] 7. Moving Camera Code Into Its Own Class
+- [ ] 8. Antialiasing
+- [ ] 9. Diffuse Materials
+- [ ] 10. Metal
+- [ ] 11. Dieletrics
+- [ ] 12. Positionable Camera
+- [ ] 13. Defocus Blur
+- [ ] 14. Where Next?
 
 

@@ -4,9 +4,21 @@ mod ray;
 
 use color::Color;
 use ray::Ray;
-use vec3::{Vec3, Point3};
+use vec3::{Vec3, Point3, dot};
+
+fn hit_sphere(center: &Point3, radious: f32, r: &Ray) -> bool {
+    let oc: Vec3 = r.origin() - center.clone();
+    let a = dot(&r.direction(), &r.direction());
+    let b = dot(&oc, &r.direction()) * 2.;
+    let c = dot(&oc, &oc) - radious*radious;
+    let discriminant = b*b - 4_f32*a*c;
+    return (discriminant >= 0.);
+}
 
 fn ray_color(r: &Ray) -> Color { 
+    if (hit_sphere(&Point3::new_with_inputs(0., 0., 1.), 0.5, r)) {
+        return Color::new_with_inputs(1., 0., 0.);
+    }
     let unit_direction = Vec3::unit_vector(r.direction());
     let a = 0.5 * (unit_direction.y() + 1.);
     return Color::new_with_inputs(1., 1., 1.) * (1.-a) + Color::new_with_inputs(0.5, 0.7, 1.) * a;
