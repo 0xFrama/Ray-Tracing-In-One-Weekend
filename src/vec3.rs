@@ -109,7 +109,7 @@ impl Vec3 {
         Vec3 { e: [x, y, z] }
     }
 
-    pub fn show(self) {
+    pub fn show(&self) {
         println!("[ {}, {}, {} ]", self.e[0], self.e[1], self.e[2]);
     }
 
@@ -125,11 +125,11 @@ impl Vec3 {
         return self.e[2];
     }
 
-    pub fn length(&self) -> f32 {
+    pub fn length(&mut self) -> f32 {
         return self.length_squared().sqrt()
     }
 
-    pub fn length_squared(&self) -> f32 {
+    pub fn length_squared(&mut self) -> f32 {
         return self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2] 
     }  
     
@@ -140,7 +140,7 @@ impl Vec3 {
     }
     
     
-    pub fn unit_vector(v: Vec3) -> Vec3 {
+    pub fn unit_vector(mut v: Vec3) -> Vec3 {
         return v / v.length();
     }
 }

@@ -1,23 +1,32 @@
 mod color;
 mod vec3;
 mod ray;
+mod hittable;
+mod sphere;
 
-use color::Color;
-use ray::Ray;
-use vec3::{Vec3, Point3, dot};
+use crate::color::Color;
+use crate::ray::Ray;
+use crate::vec3::{Vec3, Point3, dot};
 
-fn hit_sphere(center: &Point3, radious: f32, r: &Ray) -> bool {
-    let oc: Vec3 = r.origin() - center.clone();
-    let a = dot(&r.direction(), &r.direction());
-    let b = dot(&oc, &r.direction()) * 2.;
-    let c = dot(&oc, &oc) - radious*radious;
-    let discriminant = b*b - 4_f32*a*c;
-    return (discriminant >= 0.);
+fn hit_sphere(center: &Point3, radious: f32, r: &Ray) -> f32 {
+    let mut oc: Vec3 = r.origin() - center.clone();
+    let a = &r.direction().length_squared();
+    let half_b = dot(&oc, &r.direction());
+    let c = oc.length_squared() - radious*radious;
+    let discriminant = half_b*half_b - a*c;
+
+    if discriminant < 0.0 {
+        return -1.0
+    } else {
+        return (-half_b - (discriminant).sqrt() ) / * a
+    }
 }
 
 fn ray_color(r: &Ray) -> Color { 
-    if (hit_sphere(&Point3::new_with_inputs(0., 0., 1.), 0.5, r)) {
-        return Color::new_with_inputs(1., 0., 0.);
+    let t: f32 = hit_sphere(&Point3::new_with_inputs(0., 0., -1.), 0.5, r);
+    if t > 0.0 {
+        let N: Vec3 = Vec3::unit_vector(r.at(t) - Vec3::new_with_inputs(0., 0., -1.));
+        return Color::new_with_inputs(N.x()+1., N.y()+1., N.z()+1.) * 0.5;
     }
     let unit_direction = Vec3::unit_vector(r.direction());
     let a = 0.5 * (unit_direction.y() + 1.);
@@ -37,8 +46,8 @@ fn main() {
     
     let focal_length: f32 = 1.0;
     let viewport_height: f32 = 2.0;
-    let viewport_width= viewport_height * (image_width/image_height) as f32;
-    let camera_center = Point3::new_with_inputs(0.,0.,0.);
+    let viewport_width: f32 = viewport_height * (image_width/image_height) as f32;
+    let camera_center: Vec3 = Point3::new_with_inputs(0.,0.,0.);
     
     // Calculate the vectors across the horizontal and down the vertical view port edges.
     let viewport_u = Vec3::new_with_inputs(viewport_width, 0., 0.);
@@ -62,7 +71,7 @@ fn main() {
         for i in 0..image_width {
             let pixel_center = pixel00_loc + (pixel_delta_u * (i as f32)) + (pixel_delta_v * (j as f32));
             let ray_direction = pixel_center - camera_center;
-            let r = Ray::ray(camera_center, ray_direction);
+            let r: Ray = Ray::ray(camera_center, ray_direction);
             //let pixel_color = Color::new_with_inputs((i as f32/(image_width-1) as f32), (j as f32/(image_height-1) as f32), 0.);
             let pixel_color = ray_color(&r);
             Color::write_color(pixel_color);
